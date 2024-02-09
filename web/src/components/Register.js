@@ -2,14 +2,15 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom'; 
 
-const Login = () => {
+const Register = () => {
   const history = useNavigate();
-  const [formData, setFormData] = useState({
+ const [formData, setFormData] = useState({
+    username: '',
     email: '',
     password: '',
   });
 
-  const { email, password } = formData;
+  const { username, email, password } = formData;
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -18,7 +19,8 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:5000/auth/login', {
+      const response = await axios.post('http://localhost:5000/auth/register', {
+        username,
         email,
         password,
       });
@@ -26,15 +28,24 @@ const Login = () => {
       history.push('/course');
 
     } catch (error) {
-      console.error('Login error:', error.response.data);
+      console.error('Registration error:', error.response.data);
     }
   };
 
   return (
     <div className='container'>
-      <h2>Login</h2>
+      <h2>Register</h2>
       <div className='links'>
         <form onSubmit={handleSubmit}>
+          <div className='form-control'>
+            <input
+              type='text'
+              placeholder='Username'
+              name='username'
+              value={username}
+              onChange={handleChange}
+            />
+          </div>
           <div className='form-control'>
             <input
               type='email'
@@ -53,14 +64,14 @@ const Login = () => {
               onChange={handleChange}
             />
           </div>
-          <button type='submit'>Login</button>
+          <button type='submit'>Register</button>
         </form>
       </div>
-      <div className="links">
-        <Link to="/">Register</Link>
+      <div className='links'>
+        <Link to='/login'>Login</Link>
       </div>
     </div>
   );
 };
 
-export default Login;
+export default Register;
